@@ -2,13 +2,15 @@ import app from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/database';
 
+
 const config = {
-  apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  databaseURL: process.env.REACT_APP_DATABASE_URL,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  apiKey: "AIzaSyA_LljlPS6DLWYuZ8wnUQYyRRoVyMe6P34",
+  authDomain: "staffre1-1.firebaseapp.com",
+  databaseURL: "https://staffre1-1.firebaseio.com",
+  projectId: "staffre1-1",
+  storageBucket: "staffre1-1.appspot.com",
+  messagingSenderId: "474274042895",
+  appId: "1:474274042895:web:687822237416211c"
 };
 
 class Firebase {
@@ -24,6 +26,7 @@ class Firebase {
 
     this.auth = app.auth();
     this.db = app.database();
+
 
     /* Social Sign In Method Provider */
 
@@ -49,7 +52,10 @@ class Firebase {
   doSignInWithTwitter = () =>
     this.auth.signInWithPopup(this.twitterProvider);
 
-  doSignOut = () => this.auth.signOut();
+  doSignOut = (e) => {
+    e.preventDefault()
+    this.auth.signOut();
+  }
 
   doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
@@ -66,24 +72,26 @@ class Firebase {
   onAuthUserListener = (next, fallback) =>
     this.auth.onAuthStateChanged(authUser => {
       if (authUser) {
+        // console.log(authUser)
         this.user(authUser.uid)
           .once('value')
           .then(snapshot => {
             const dbUser = snapshot.val();
 
-            // default empty roles
-            if (!dbUser.roles) {
-              dbUser.roles = {};
-            }
+            // console.log(dbUser)
+            // // default empty roles
+            // if (!dbUser.roles) {
+            //   dbUser.roles = {};
+            // }
 
-            // merge auth and db user
-            authUser = {
-              uid: authUser.uid,
-              email: authUser.email,
-              emailVerified: authUser.emailVerified,
-              providerData: authUser.providerData,
-              ...dbUser,
-            };
+            // // merge auth and db user
+            // authUser = {
+            //   uid: authUser.uid,
+            //   email: authUser.email,
+            //   emailVerified: authUser.emailVerified,
+            //   providerData: authUser.providerData,
+            //   ...dbUser,
+            // };
 
             next(authUser);
           });
@@ -103,6 +111,15 @@ class Firebase {
   message = uid => this.db.ref(`messages/${uid}`);
 
   messages = () => this.db.ref('messages');
+
+  document = (refId) => this.db.ref(`/documents/${refId}`);
+
+  documents = () => this.db.ref(`documents`);
+
+  annotation = (annotationId) => this.db.ref(`/annotations/${annotationId}`);
+
+  annotations = () => this.db.ref(`annotations`);
+
 }
 
 export default Firebase;

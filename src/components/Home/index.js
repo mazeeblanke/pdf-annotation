@@ -1,19 +1,23 @@
 import React from 'react';
 import { compose } from 'recompose';
 
-import { withAuthorization, withEmailVerification } from '../Session';
+import { withAuthorization, withEmailVerification, withAuthentication } from '../Session';
 import Messages from '../Messages';
+
+// import firebase from '../Firebase/index';
+
+import App from '../App'
 
 const HomePage = () => (
   <div>
-    <h1>Home Page</h1>
-    <p>The Home Page is accessible by every signed in user.</p>
-
-    <Messages />
+    <App />
   </div>
 );
 
-const condition = authUser => !!authUser;
+// export default HomePage
+
+// const condition = authUser => !!authUser;
+const condition = authUser => true;
 
 export default compose(
   withEmailVerification,
