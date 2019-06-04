@@ -1,4 +1,4 @@
 # PDF Annotation
 
-DEMO [here](http://http://pdf-annotation.surge.sh)
+DEMO [here](http://pdf-annotation.surge.sh)
 
